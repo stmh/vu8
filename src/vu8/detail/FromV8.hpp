@@ -120,6 +120,15 @@ struct FromV8<double> : FromV8Base<double> {
     }
 };
 
+template <>
+struct FromV8<float> : FromV8Base<float> {
+    static inline double exec(ValueHandle value) {
+        if (! value->IsNumber())
+            throw std::runtime_error("expected javascript number");
+
+        return value->ToNumber()->Value();
+    }
+};
 
 template <class T, class A>
 struct FromV8< std::vector<T, A> > : FromV8Base< std::vector<T, A> > {
